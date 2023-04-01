@@ -4,6 +4,8 @@ import "./App.css";
 
 function App() {
   const [data, setData] = useState([]);
+  const [keys, setKeys] = useState([]);
+  const [headers, SetHeaders] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -12,13 +14,22 @@ function App() {
   const fetchData = async () => {
     const response = await axios.get(" https://restcountries.com/v3.1/all");
     setData(response.data);
+
+    const keys = response.data.map((key) => Object.keys(key));
+    setKeys(keys);
   };
 
   const handleFetch = () => {
     fetchData();
   };
 
-  console.log(data[0]);
+  data.map((country) => {
+    console.log(country);
+    {
+     Object.keys(country).forEach((name) => console.log(name))
+    }
+    
+  });
 
   return (
     <div className="App">
@@ -26,20 +37,12 @@ function App() {
       <table>
         <thead>
           <tr>
-            <th>Country</th>
-            <th>Flag</th>
-            <th>Population</th>
+            {keys.map((header, index) => (
+              <th>{header[index]}</th>
+            ))}
           </tr>
         </thead>
-        <tbody>
-          {data.map((country, index) => (
-            <tr key={index}>
-              <td>{country.name.common}</td>
-              <td>{country.flag}</td>
-              <td>{country.population || 'N/A'}</td>
-            </tr>
-          ))}
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   );
